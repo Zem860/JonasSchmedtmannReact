@@ -4,7 +4,7 @@ const SkillList = () => {
   return (
     <ul className="skill-list">
       {skills.map((d, index) => (
-        <Skill key={index} skill={d.skill} color={d.color} icon={d.level ==="advanced"?"💪":d.level==='intermediate'?"👍":"🔥"} />
+        <Skill key={index} skill={d.skill} color={d.color} level={d.level} />
       ))}
     </ul>
   // <ul className="skill-list">
