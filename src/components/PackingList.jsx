@@ -1,14 +1,14 @@
-import { initialItems } from '../data';
+// import { initialItems } from '../data';
 import Item from './Item';
+import PropTypes from 'prop-types';
 
-
-const PackingList = () => {
+const PackingList = ({items, onDeleteItems, onToggleItems}) => {
 
   return (
     <div className="list">
       <ul>
-        {initialItems.map((d) => (
-          <Item key={d.id} item={d} />
+        {items.map((d) => (
+          <Item key={d.id} item={d} onDeleteItems={onDeleteItems} onToggleItems={onToggleItems}/>
         ))}
       </ul>
     </div>
@@ -16,3 +16,9 @@ const PackingList = () => {
 };
 
 export default PackingList;
+
+PackingList.propTypes = {
+  onToggleItems:PropTypes.func.isRequired,
+  onDeleteItems:PropTypes.func.isRequired,
+  items: PropTypes.array.isRequired
+};
