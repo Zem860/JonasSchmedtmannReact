@@ -1,49 +1,38 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Count from './Count';
 function App() {
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(1);
   const [count, setCount] = useState(0);
   const today = new Date().toDateString();
   const [customizeDate, setCustomizaDate] = useState(today)
 
-
-  const handleDate = ()=>{
+  useEffect(() => {
     const date = new Date();
-
-    date.setDate(date.getDate()+count)
-
-    setCustomizaDate(date.toDateString())
-  }
+    date.setDate(date.getDate() + count);
+    setCustomizaDate(date.toDateString());
+  }, [count]);
 
   
-  const handleStep = (bool) => {
-    if (bool) {
-      setStep((s) => s + 1);
-    } else{
-      setStep((s) => s - 1);
-    }
+  const handleSlide = (v) => {
+    setStep(v)
   };
 
   const handleCount = (bool) => {
 
-
     if (bool) {
-      setCount((c) => c + 1);
+      setCount((c) => Number(c) + step);
     } else{
-      setCount((c) => c - 1);
+      setCount((c) => Number(c) - step);
     }
-
-    handleDate()
-   
   };
 
   return (
     <div className="middle">
       <div>
-        <Count text={'Step'} num={step} handle={handleStep} />
+        <Count text={'Step'} num={step} handleSlide={handleSlide} />
       </div>
       <div>
-        <Count text={'Count'} num={count} handle={handleCount}  />
+        <Count text={'Count'} num={count} handleCount={handleCount}  />
       </div>
       <div>
 
