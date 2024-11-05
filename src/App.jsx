@@ -12,7 +12,7 @@ function App() {
           className={id === que.id ? 'selected' : ''}
           key={que.id}
           onClick={() => {
-            setId(que.id);
+            setId(que.id ===id?null:que.id);
           }}
         >
           <Card question={que} clicked={id}/>
