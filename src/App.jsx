@@ -23,12 +23,28 @@ function App() {
     );
   };
 
+  const deleteAllItems = () => {
+    if (items.length>0) {
+      const confirmed = window.confirm(
+        'Are you sure you are going to delete everything?',
+      );
+      if (confirmed) setItems([]);
+    } else {
+      alert('Add something before you can clear anything.')
+    }
+  };
+
   return (
     <div className="app">
       <Logo />
       <Form onAddItems={handleAddItems} />
-      <PackingList items={items} onDeleteItems={handleDeleteItems} onToggleItems={handleToggleItem} />
-      <Stats />
+      <PackingList
+        items={items}
+        onDeleteAllItems={deleteAllItems}
+        onDeleteItems={handleDeleteItems}
+        onToggleItems={handleToggleItem}
+      />
+      <Stats items={items} />
     </div>
   );
 }
