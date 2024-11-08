@@ -1,35 +1,22 @@
-import { useEffect, useState } from 'react';
-
+import FriendList from './FriendList';
+import FormAddFriend from './FormAddFriend';
+import Button from './Button';
+import FormSplitBill from './FormSplitBill';
+import { useState } from 'react';
 function App() {
-  async function getAdvice() {
-    const res = await fetch(`https://api.adviceslip.com/advice`);
-    const data = await res.json();
-    setAdvice(data.slip.advice);
-    setCount((c) => c + 1);
+  const [showAddFriend, setShowAddFriend] = useState(false);
+  const handleShowAddFriend = ()=>{
+    setShowAddFriend((show)=>!show) //用這種return的方式改變他的值是比較正確的寫法
   }
-
-  const [advice, setAdvice] = useState('');
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    getAdvice()
-
-  }, []);
-
   return (
-    <>
-      <h1>{advice}</h1>
-      <button onClick={getAdvice}>get advice</button>
-      <Message count ={count} />
-    </>
+    <div className="app">
+      <div className="sidebar">
+        <FriendList />
+        {showAddFriend && <FormAddFriend />} <Button onClick={handleShowAddFriend}>{showAddFriend?'Close':'Add Friend'}</Button>
+      </div>
+      <FormSplitBill />
+    </div>
   );
-}
-
-function Message({count}){
-  return (
-    <p>
-        You have read <strong>{count}</strong> advices
-      </p>
-  )
 }
 
 export default App;
