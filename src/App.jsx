@@ -70,6 +70,7 @@ function TabContent({ item }) {
     setLikes(likes =>likes + 1);
     setLikes(likes =>likes + 1);
     setLikes(likes =>likes + 1);
+    //在function內部如果需要使用更新的state需要用callback去獲取更新的值
   }
 
 function handleUndo(){
