@@ -21,13 +21,9 @@ const Box = ({children}) => {
 export default Box;
 
 
-Box.propTypes={
-    children:PropTypes.shape({    movie:PropTypes.shape({
-        imdbID: PropTypes.string.isRequired,
-        Title: PropTypes.string.isRequired,
-        Year: PropTypes.string.isRequired,
-        Poster:
-        PropTypes.string.isRequired,
-
-    })})
-}
+Box.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]).isRequired,
+};

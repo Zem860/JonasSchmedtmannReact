@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
-const Movie = ({ movie }) => {
+const Movie = ({ movie, onSelectedMovie }) => {
   return (
-    <li>
+    <li className='list-movies' onClick = {()=>{
+      onSelectedMovie(movie.imdbID)
+    }}>
       <img src={movie.Poster} alt={`${movie.Title} poster`} />
       <h3>{movie.Title}</h3>
       <div>
