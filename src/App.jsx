@@ -72,6 +72,7 @@ export default function App() {
       setErr('');
       return;
     }
+    handleClosedMovie();
     fetchMovies();
 
     return ()=>{
