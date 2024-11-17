@@ -14,7 +14,7 @@ import MovieDetails from './MovieDetails';
 const key = 'd90be5ab';
 
 export default function App() {
-  const [query, setQuery] = useState('Twilight');
+  const [query, setQuery] = useState('');
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -39,12 +39,16 @@ export default function App() {
     // console.log(mov)
     setWatched(watched =>[...watched, mov])
   }
+
+
   useEffect(() => {
+    const controller = new AbortController();
+
     async function fetchMovies() {
       setIsLoading(true);
       setErr('');
       try {
-        const res = await fetch(movieAPI);
+        const res = await fetch(movieAPI, {signal:controller.signal});
         if (!res.ok) throw new Error('sth went wrong with fetching movie data');
 
         const data = await res.json();
@@ -52,9 +56,12 @@ export default function App() {
         if (data.Response === 'False') throw new Error('Movie Not Found!');
         setMovies(data.Search);
         setIsLoading(false);
+        setErr('');
       } catch (error) {
-        console.error('Failed to fetch movies:', error.message);
-        setErr(error.message);
+        if (error.name!=='AbortError'){
+          setErr(error.message);
+        }
+        
       } finally {
         setIsLoading(false);
       }
@@ -66,6 +73,10 @@ export default function App() {
       return;
     }
     fetchMovies();
+
+    return ()=>{
+      controller.abort();
+    }
   }, [query]);
 
   return (

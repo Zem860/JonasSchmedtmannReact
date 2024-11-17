@@ -18,6 +18,18 @@ const MovieDetails = ({ selectedId, onCloseMovie, onAddWatched, watched }) => {
   // console.log(watched);
   // console.log(selectedId);
   // console.log(isWatched);
+
+  useEffect(()=>{
+    const callback = (e)=>{
+      if (e.code === 'Escape'){
+        onCloseMovie();
+      }
+    }
+    document.addEventListener('keydown', callback)
+    return ()=>{
+      document.removeEventListener('keydown', callback);
+    }
+  },[onCloseMovie]) //how we handle keypress event in react[go back to DOM cuz we interact with DOM(outside)]
   const handleAdd = () => {
     const newWatchedMovie = {
       imdbID: selectedId,
@@ -44,7 +56,13 @@ const MovieDetails = ({ selectedId, onCloseMovie, onAddWatched, watched }) => {
     Director: director,
     Genre: genre,
   } = movie;
+   useEffect(()=>{
+    if (!title) return;
+    document.title = `Movie | ${title}`
 
+    return ()=>{document.title = 'usePopcorn'; console.log(`${title}`)}; //clean-up function //closure in JS
+    //clean-up function runs when re-render and dismount
+   },[title])
   useEffect(() => {
     setIsLoading(true);
     const getMovieDetails = async () => {
