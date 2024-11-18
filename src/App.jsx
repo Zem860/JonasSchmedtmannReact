@@ -1,7 +1,6 @@
 import NavBar from './NavBar';
 import { useState, useEffect } from 'react';
 import MainBody from './MainBody';
-// import { tempMovieData, tempWatchedData } from './data/movies';
 import Search from './Search';
 import NumResults from './NumResults';
 import Box from './Box';
@@ -16,17 +15,20 @@ const key = 'd90be5ab';
 export default function App() {
   const [query, setQuery] = useState('');
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
+  // const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [err, setErr] = useState('');
   const [selectedId, setSelectedId] = useState(null);
   const movieAPI = `http://www.omdbapi.com/?apikey=${key}&s=${query}`;
+  const [watched, setWatched] = useState(()=>{
+    const storedValue = localStorage.getItem('watched')
+    return JSON.parse(storedValue) 
+  });
 
   const handleDeleteWatched = (id)=>{
     setWatched(watched => watched?.filter(movie=>movie.imdbID!==id))
   }
   const handleSelectedMovie = (id)=>{
-    // setSelectedId(id)
     setSelectedId(selectedId=>selectedId===id?null:id)
     
   }
@@ -36,10 +38,13 @@ export default function App() {
   }
 
   const handleAddWatched = (mov)=>{
-    // console.log(mov)
-    setWatched(watched =>[...watched, mov])
+    setWatched(watched =>[...watched, mov]);
+    // localStorage.setItem('watched', JSON.stringify([...watched, mov]))
   }
 
+  useEffect(()=>{
+    localStorage.setItem('watched', JSON.stringify(watched))
+  },[watched])
 
   useEffect(() => {
     const controller = new AbortController();
@@ -52,7 +57,6 @@ export default function App() {
         if (!res.ok) throw new Error('sth went wrong with fetching movie data');
 
         const data = await res.json();
-        // console.log(data);
         if (data.Response === 'False') throw new Error('Movie Not Found!');
         setMovies(data.Search);
         setIsLoading(false);
@@ -87,19 +91,8 @@ export default function App() {
         <NumResults movies={movies} />
       </NavBar>
       <MainBody>
-        {/* 可以在元件內使用element的方式去pass Props可是用children的結構上會比較清晰 */}
-        {/* <Box element={<MovieList movies={movies} />} />
-        <Box
-          element={
-            <>
-              <Summary watched={watched} />
-              <WatchedMovieList watched={watched} />
-            </>
-          }
-        /> */}
         <Box>
           {isLoading && <Loader />}
-          {/* {isLoading? <Loader/>:<MovieList movies={movies} />} */}
           {!isLoading && !err && <MovieList movies={movies}  onSelectedMovie = {handleSelectedMovie}/>}
           {err && <ErrorMsg errMsg={err} />}
         </Box>
@@ -114,22 +107,6 @@ export default function App() {
           )}
         </Box>
       </MainBody>
-      {/* <nav className="nav-bar">
-        <div className="logo">
-          <span role="img">🍿</span>
-          <h1>usePopcorn</h1>
-        </div>
-        <input
-          className="search"
-          type="text"
-          placeholder="Search movies..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <p className="num-results">
-          Found <strong>{movies.length}</strong> results
-        </p>
-      </nav> */}
     </>
   );
 }

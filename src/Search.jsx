@@ -1,6 +1,21 @@
-// import { useState } from 'react';
+import { useEffect, useRef } from 'react';
 import PropTypes from "prop-types";
 const Search = ({query, setQuery}) => {
+  const InputEl = useRef(null)
+  
+  useEffect(()=>{
+    const callback =(e)=>{
+      if (e.code ==="Enter"){
+        if (document.activeElement === InputEl.current) return;
+        InputEl.current.focus();
+        setQuery("");
+      }
+    }
+    document.addEventListener("keydown", callback)
+
+    InputEl.current.focus();
+    return ()=> document.addEventListener('keydown', callback)
+  },[setQuery]) //ref only get added the dom element after dom is loaded
 
     return ( <input
         className="search"
@@ -8,6 +23,7 @@ const Search = ({query, setQuery}) => {
         placeholder="Search movies..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
+        ref = {InputEl}
       /> );
 }
  
