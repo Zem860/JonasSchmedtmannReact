@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import StarRating from './StarRating';
 import Loader from './Loader';
@@ -12,12 +12,19 @@ const MovieDetails = ({ selectedId, onCloseMovie, onAddWatched, watched }) => {
   const [userRating, setUserRating] = useState('');
   const allIds = watched?.map((movie) => movie.imdbID);
   const isWatched = allIds.indexOf(selectedId) != -1;
+  const countRef = useRef(0);
   const watchedUserRating =watched?.find(
     (movie) => movie.imdbID === selectedId,
   )?.imdbRating;
   // console.log(watched);
   // console.log(selectedId);
   // console.log(isWatched);
+
+  useEffect(()=>{
+    if (userRating.current)countRef.current ++;
+    //當我們不希望他re-render又需要有一個持續存在的值
+    //當我們不希望她和render有任何關係(不需要render)
+  },[userRating])
 
   useEffect(()=>{
     const callback = (e)=>{
@@ -39,6 +46,7 @@ const MovieDetails = ({ selectedId, onCloseMovie, onAddWatched, watched }) => {
       imdbRating: Number(imdbRating),
       runtime: Number(runtime.split(' ').at(0)),
       userRating,
+      countRatingDecisions: countRef.current,
     };
 
     onAddWatched(newWatchedMovie);

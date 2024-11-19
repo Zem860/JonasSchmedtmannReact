@@ -14,7 +14,7 @@ const Search = ({query, setQuery}) => {
     document.addEventListener("keydown", callback)
 
     InputEl.current.focus();
-    return ()=> document.addEventListener('keydown', callback)
+    return ()=> document.removeEventListener('keydown', callback)
   },[setQuery]) //ref only get added the dom element after dom is loaded
 
     return ( <input
