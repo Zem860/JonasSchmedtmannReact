@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import StarRating from './StarRating';
 import Loader from './Loader';
+import { useKey } from './useKey';
 
 const key = 'd90be5ab';
 
@@ -26,17 +27,18 @@ const MovieDetails = ({ selectedId, onCloseMovie, onAddWatched, watched }) => {
     //當我們不希望她和render有任何關係(不需要render)
   },[userRating])
 
-  useEffect(()=>{
-    const callback = (e)=>{
-      if (e.code === 'Escape'){
-        onCloseMovie();
-      }
-    }
-    document.addEventListener('keydown', callback)
-    return ()=>{
-      document.removeEventListener('keydown', callback);
-    }
-  },[onCloseMovie]) //how we handle keypress event in react[go back to DOM cuz we interact with DOM(outside)]
+  useKey('escape', onCloseMovie)
+  // useEffect(()=>{
+  //   const callback = (e)=>{
+  //     if (e.code === 'Escape'){
+  //       onCloseMovie();
+  //     }
+  //   }
+  //   document.addEventListener('keydown', callback)
+  //   return ()=>{
+  //     document.removeEventListener('keydown', callback);
+  //   }
+  // },[onCloseMovie]) //how we handle keypress event in react[go back to DOM cuz we interact with DOM(outside)]
   const handleAdd = () => {
     const newWatchedMovie = {
       imdbID: selectedId,
