@@ -126,6 +126,7 @@
     cursor: pointer;
     border-radius: 100px;
     transition: 0.3s;
+    width:100%;
   }
   
   .btn:not([disabled]):hover {
