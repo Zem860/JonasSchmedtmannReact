@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-const Options = ({ question, dispatch, answer }) => {
+const Options = ({ question,  dispatch, answer }) => {
   const hasAnswer = answer!==null;
   return (
     <div className="options">

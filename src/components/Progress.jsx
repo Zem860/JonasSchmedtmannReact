@@ -14,4 +14,5 @@ Progress.propTypes = {
     numQuestions:PropTypes.number,
     points:PropTypes.number,
     maxPossiblePoints:PropTypes.number,
+    answer:PropTypes.any,
 }
